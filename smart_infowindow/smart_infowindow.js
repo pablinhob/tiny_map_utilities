@@ -12,7 +12,7 @@ function smart_infowindow(opts) {
     var current_path = $('script[src$="/smart_infowindow.js"]').attr('src').replace("smart_infowindow.js", "");
   }
   else {
-    var current_path = '/vendor/yarn/tiny_map_utilities/smart_infowindow/';
+    var current_path = '/vendor/bower/tiny_map_utilities/smart_infowindow/';
   }
 
   this.options = new Object({
@@ -118,6 +118,7 @@ smart_infowindow.prototype.MarkerEvent = function(marker, evento, content) {
   var that = this;
 
   google.maps.event.addListener(marker, evento, function( ){
+    console.log('evento marker', evento)
     that.open(marker, evento, content);
   });
 }
@@ -151,7 +152,7 @@ smart_infowindow.prototype.open = function( marker, evento, content, force_keep_
 
   if( smart_infowindow_is_on_infowindow == false) {
     // lets open infowindow
-    this.close();
+    this.close(true);
     this.SetContent(content);
     setTimeout(function () {
       that.SetStyles();
@@ -165,8 +166,21 @@ smart_infowindow.prototype.open = function( marker, evento, content, force_keep_
 };
 
 
-smart_infowindow.prototype.close = function( ) {
-  $(this.div_).hide();
+smart_infowindow.prototype.close = function( instant ) {
+  var that = this;
+
+  if( instant ){
+    $(that.div_).hide();
+  }
+  else {
+    setTimeout(function(){
+      if(smart_infowindow_is_on_infowindow == false) {
+        $(that.div_).hide();
+      }
+    }, 40);
+  }
+
+
 }
 
 
